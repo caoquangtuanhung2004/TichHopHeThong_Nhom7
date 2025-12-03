@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách nhân viên</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='list_employees.css') }}">
+</head>
+
+<body>
+    <button class="btn-back" onclick="history.back()">⬅ Quay lại</button>
+
+    <h2>Danh Sách Nhân Viên</h2>
+
+    <input type="text" id="searchBox" placeholder="Nhập tên nhân viên để tìm...">
+    <button id="searchBtn">Tìm kiếm</button>
+
+    <table id="employeeTable">
+        <thead>
+            <tr>           
+                <th class="namehuman">Họ tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>SĐT</th>
+                <th class="email-col">Email</th>
+                <th>Ngày vào làm</th>
+                <th>Phòng ban</th>
+                <th>Chức vụ</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+
+        function formatDate(dateString) {
+            if (!dateString) return "";
+            const date = new Date(dateString);
+            let day = date.getDate().toString().padStart(2, '0');
+            let month = (date.getMonth() + 1).toString().padStart(2, '0');
+            let year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        //chuuyen sang trang update
+        function editEmployee(id) {
+            //window.location.href = `templates/update_employees.html?id=${id}`;
+            window.location.href = `/update_employee?id=${id}`;
+
+        }
+
+        function renderTable(data) {
+            const tbody = document.querySelector("#employeeTable tbody");
+            tbody.innerHTML = ""; // xóa bảng
+
+            data.forEach(emp => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+          
+            <td data-label="Họ tên">${emp.FullName}</td>
+            <td data-label="Ngày sinh">${formatDate(emp.DateOfBirth)}</td>
+            <td data-label="Giới tính">${emp.Gender}</td>
+            <td data-label="SĐT">${emp.PhoneNumber}</td>
+            <td data-label="Email">${emp.Email}</td>
+            <td data-label="Ngày vào làm">${formatDate(emp.HireDate)}</td>
+            <td data-label="Phòng ban">${emp.DepartmentName}</td>
+            <td data-label="Chức vụ">${emp.PositionName}</td>
+            <td data-label="Trạng thái">${emp.Status}</td>
+            <td data-label="Hành động">
+                <button class="btn-edit" onclick="editEmployee(${emp.EmployeeID})">Cập nhật</button>
+                <button class="btn-delete" onclick="deleteEmployee(${emp.EmployeeID})">Xóa</button>
+            </td>
+        `;
+
+                tbody.appendChild(row);
+            });
+        }
+        //tai toan bo nhan vien
+        function loadEmployees() {
+            fetch("http://127.0.0.1:5000/employees")
+                .then(response => response.json())
+                .then(data => renderTable(data))
+                .catch(err => console.error("Lỗi API:", err));
+        }
+
+        // tim kiem nhan vien
+        function searchEmployee() {
+            const keyword = document.getElementById("searchBox").value.trim();
+
+            fetch(`http://127.0.0.1:5000/search-employees?name=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => {
+                    renderTable(data);
+                })
+                .catch(err => console.error("Lỗi tìm kiếm:", err));
+        }
+
+        //gan nut tim keim
+        document.getElementById("searchBtn").addEventListener("click", searchEmployee);
+
+        // Gõ tới đâu tìm tới đó (optional)
+        document.getElementById("searchBox").addEventListener("keyup", searchEmployee);
+
+        // Gọi API load danh sách khi mở trang
+        loadEmployees();
+
+
+        function deleteEmployee(id) {
+            if (!confirm("Bạn có chắc muốn xóa nhân viên này không?")) return;
+            fetch(`http://127.0.0.1:5000/delete-employee/${id}`, {
+                method: "DELETE"
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("Lỗi: " + data.error);
+                        return;
+                    }
+                    alert(data.message);
+                    loadEmployees();//load lai bang nhan vien
+                })
+                .catch(err => console.error("Lỗi xóa nhân viên:", err));
+        }
+    </script>
+</body>
+
+</html>

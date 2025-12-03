@@ -1,0 +1,185 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f7fa;
+    padding: 20px;
+}
+.btn-back {
+    position: fixed;
+    top: 10px;           /* chỉnh cao/thấp tại đây */
+    left: 10px;          /* cách mép trái */
+    background: #cc3b6c;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    z-index: 999;
+    transition: 0.2s;
+}
+
+.btn-back:hover {
+    background: #0369a1;
+    transform: scale(1.05);
+}
+
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #333;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#searchBox {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+#searchBtn {
+    padding: 10px 16px;
+    background: #0078ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+#searchBtn:hover {
+    background: #005fcc;
+}
+
+/* ===== TABLE ===== */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;         /* TÁCH RÕ TỪNG HÀNG */
+    background: transparent;
+}
+
+
+
+
+
+
+thead tr th {
+    background: #0078ff;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+}
+
+
+tbody tr {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    transition: 0.25s;
+}
+
+tbody tr:nth-child(even) {
+    background: #f9fbff;          /* NỀN XEN KẼ */
+}
+
+tbody tr:hover {
+    background: #f1f7ff !important;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.13);
+}
+
+td {
+    padding: 15px;
+    font-size: 14px;
+    border: none;
+}
+
+
+/* ===== BUTTONS ===== */
+.btn-edit {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    margin-right: 6px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.btn-edit:hover {
+    background: #1f7e34;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.btn-delete:hover {
+    background: #b52a33;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    th, td {
+        font-size: 13px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    td {
+        border: none;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 5px;
+    }
+
+    td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #0078ff;
+        width: 45%;
+    }
+
+    th {
+        display: none;
+    }
+}

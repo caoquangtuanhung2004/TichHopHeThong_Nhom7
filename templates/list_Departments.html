@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý phòng ban</title>
+
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+    
+        body {
+            background: #f3f6fa;
+            padding: 20px;
+        }
+    
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    
+        /* Khung chứa bảng */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            /* Quan trọng cho màn hình nhỏ */
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 400px;
+        }
+    
+        thead {
+            background: #3498db;
+            color: white;
+        }
+    
+        th,
+        td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+    
+        tr:nth-child(even) {
+            background: #f2f8ff;
+        }
+    
+        tr:hover {
+            background: #dff0ff;
+            transition: 0.2s;
+        }
+    
+        /* Responsive cho điện thoại */
+        @media (max-width: 600px) {
+            table thead {
+                display: none;
+                /* Ẩn header trên mobile */
+            }
+    
+            table,
+            tbody,
+            tr,
+            td {
+                display: block;
+                width: 100%;
+            }
+    
+            tr {
+                margin-bottom: 15px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                padding: 10px;
+            }
+    
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+    
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: bold;
+                color: #555;
+                text-align: left;
+            }
+        }
+    
+        .btn-back {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #3498db;
+            color: white;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.25s ease;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+    
+        .btn-back:hover {
+            background: #217dbb;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, 0.25);
+        }
+    
+        .btn-back:active {
+            transform: scale(0.97);
+        }
+    
+        .btn-editDepartment,
+        .btn-delete {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.25s ease-in-out;
+            color: #fff;
+        }
+    
+        /* Nút cập nhật */
+        .btn-editDepartment {
+            background: #1e88e5;
+        }
+    
+        .btn-editDepartment:hover {
+            background: #1565c0;
+            transform: translateY(-1px);
+        }
+    
+        /* Nút xóa */
+        .btn-delete {
+            background: #e53935;
+        }
+    
+        .btn-delete:hover {
+            background: #c62828;
+            transform: translateY(-1px);
+        }
+    
+        /* Hiệu ứng nhấn */
+        .btn-editDepartment:active,
+        .btn-delete:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+<a href="/add_department" 
+   style="
+       display: inline-block;
+       background: #27ae60; 
+       color: white; 
+       padding: 10px 18px;
+       border-radius: 8px;
+       font-size: 16px;
+       font-weight: bold;
+       text-decoration: none;
+   ">
+    ➕ Thêm mới phòng ban
+</a>
+
+
+    <h2>Danh sách phòng ban</h2>
+    <button class="btn-back" onclick="history.back()">⬅ Quay lại</button>
+
+    <div class="table-container">
+        <table id="DepartmentTable">
+            <thead>
+                <tr>
+                    <th>ID phòng ban</th>
+                    <th>Tên phòng ban</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        function edit(id) {
+            //window.location.href = `templates/update_employees.html?id=${id}`;
+            window.location.href = `/update_Departments?id=${id}`;
+
+        }
+        function renderTablePhongBan(data) {
+            const tbody = document.querySelector("#DepartmentTable tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(dep => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td data-label="ID Phòng ban">${dep.DepartmentID}</td>
+                    <td data-label="Tên phòng ban">${dep.DepartmentName}</td>
+                    <td data-label="Hành động">
+                        <button class="btn-editDepartment" onclick="edit(${dep.DepartmentID})">Cập nhật</button>
+                        <button class="btn-delete" onclick="deleteDepartment(${dep.DepartmentID})">Xóa</button>
+                    </td>
+               `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Tải danh sách phòng ban
+        function loadDepartments() {
+            fetch("http://127.0.0.1:5000/departments")
+                .then(res => res.json())
+                .then(data => renderTablePhongBan(data))
+                .catch(err => console.error("Lỗi API:", err));
+        }
+         
+        //xoa phong ban
+        function deleteDepartment(id) {
+        if (!confirm("Bạn có chắc chắn muốn xóa phòng ban này?")) {
+            return;
+        }
+
+        fetch(`http://127.0.0.1:5000/delete-dept/${id}`, {
+            method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error); // Thông báo lỗi: đang có nhân viên
+            } else {
+                alert("Xóa phòng ban thành công!");
+                loadDepartments(); // Reload bảng
+            }
+        })
+        .catch(err => {
+            alert("Lỗi API xóa phòng ban!");
+            console.error(err);
+        });
+    }
+
+        loadDepartments();
+    </script>
+
+</body>
+
+</html>
