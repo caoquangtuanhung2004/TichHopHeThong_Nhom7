@@ -3,14 +3,15 @@ from flask import Flask, render_template
 from routes.emplyees import app as employees_app
 from routes.departments import departments_app
 from routes.positions import positions_app
-
+from routes.attendance import attendance_app
 app = Flask(__name__)
-
+app.config['JSON_AS_ASCII'] = False
+app.config['JSONIFY_MIMETYPE'] = 'application/json; charset=utf-8'
 # Đăng ký Blueprint
 app.register_blueprint(employees_app)
 app.register_blueprint(departments_app)
 app.register_blueprint(positions_app)
-
+app.register_blueprint(attendance_app)
 @app.route("/")
 def home():  
     #return render_template("employees.html")

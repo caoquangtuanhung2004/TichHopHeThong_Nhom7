@@ -5,31 +5,107 @@
   <meta charset="utf-8" />
   <title>Home</title>
   <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #f5f5f5
-    }
+     body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .nav {
+            background: #0d6efd;
+            padding: 12px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav a:hover {
+            text-decoration: underline;
+        }
 
-    .nav {
-      background: #0d6efd;
-      padding: 12px;
-      display: flex;
-      gap: 20px
-    }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-    .nav a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold
-    }
+        h1 {
+            text-align: center;
+            color: #0d6efd;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
 
-    .nav a:hover {
-      text-decoration: underline
-    }
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 20px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-detail { background-color: #0d6efd; }
+        .btn-update { background-color: #198754; }
+        .btn-summary { background-color: #0dcaf0; }
+
+        .btn i {
+            font-size: 20px;
+        }
+
+        #dynamic-content {
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            min-height: 400px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2a3cc3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+  
   </style>
-</head>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <body>
 
@@ -38,7 +114,72 @@
     <a href="{{url_for('employeesquanly')}}">Quản lý nhân viên</a>
     <a href="{{url_for('Departments_list')}}">Quản lý phòng ban</a>
     <a href="{{url_for('Positions_list')}}">Quản lý chức vụ</a>
-  </div>
+     <a onclick="showAttendance(); return false;">Quản lý chấm công</a>
+  <!-- Trang chủ -->
+    <div id="home-content" style="padding: 20px;">
+    </div>
+
+    <!-- Panel chấm công -->
+    <div id="attendance-panel" style="display: none;">
+        <div class="container">
+            <h1>QUẢN LÝ CHẤM CÔNG</h1>
+            <div class="btn-group">
+                <a href="#" onclick="loadPage('detail')" class="btn btn-detail">
+                    <i class="fas fa-eye"></i> Xem chi tiết chấm công
+                </a>
+                <a href="#" onclick="loadPage('update')" class="btn btn-update">
+                    <i class="fas fa-edit"></i> Cập nhật chấm công
+                </a>
+                <a href="#" onclick="loadPage('summary')" class="btn btn-summary">
+                    <i class="fas fa-chart-bar"></i> Tổng hợp chấm công
+                </a>
+            </div>
+            <div id="dynamic-content">
+                <p style="text-align: center; padding: 20px;">Chọn một chức năng để bắt đầu.</p>
+            </div>
+            <a href="{{ url_for('home') }}" class="back-btn">← Trang chủ</a>
+        </div>
+    </div>
+
+    <script>
+        function showHome() {
+            document.getElementById('home-content').style.display = 'block';
+            document.getElementById('attendance-panel').style.display = 'none';
+        }
+
+        function showAttendance() {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('attendance-panel').style.display = 'block';
+            // Không tự động load gì cả — để người dùng click nút
+        }
+
+        async function loadPage(page) {
+            const contentDiv = document.getElementById('dynamic-content');
+            contentDiv.innerHTML = '<p style="text-align: center; padding: 20px;">Đang tải...</p>';
+
+            let url;
+            if (page === 'detail') {
+                url = "{{ url_for('attendance.attendance_detail_page', employee_id='NV001', date='2025-12-07') }}";
+            } else if (page === 'update') {
+                url = "{{ url_for('attendance.attendance_update_page', employee_id='NV001', date='2025-12-07') }}";
+            } else if (page === 'summary') {
+                url = "{{ url_for('attendance.attendance_summary_page') }}";
+            }
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const html = await response.text();
+                contentDiv.innerHTML = html;
+            } catch (err) {
+                contentDiv.innerHTML = `<p style="color: red; text-align: center; padding: 20px;">Lỗi khi tải trang: ${err.message}</p>`;
+            }
+        }
+    </script>
+
+
 
 </body>
 

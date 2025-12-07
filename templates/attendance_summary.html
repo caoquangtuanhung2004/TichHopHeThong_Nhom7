@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng hợp chấm công</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        .filters { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; align-items: end; }
+        .filter-group { min-width: 180px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #555; }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        button { background-color: #007bff; color: white; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #e9ecef; font-weight: bold; }
+        .status { padding: 4px 8px; border-radius: 4px; font-weight: bold; }
+        .status.on-time, .status.checked-in, .status.checked-out { background-color: #d4edda; color: #155724; }
+        .status.late { background-color: #fff3cd; color: #856404; }
+        .status.absent { background-color: #f8d7da; color: #721c24; }
+        .action-links a {
+            margin-right: 8px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .action-links a:hover { text-decoration: underline; }
+        .home-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .home-link:hover { background-color: #5a6268; }
+        .no-data { text-align: center; padding: 20px; color: #666; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Tổng hợp chấm công</h2>
+
+        <!-- Bộ lọc -->
+      <div class="filters">
+    <div>
+        <label for="filter-department">Phòng ban</label>
+        <select id="filter-department">
+            <option value="">Tất cả</option>
+               <option value="1">Giám Đốc </option>
+                 <option value="2">Nhân Viên</option>
+                 <option value="3">Trưởng Phòng </option>
+            <!-- Dữ liệu phòng ban sẽ được load động -->
+        </select>
+    </div>
+    <div>
+        <label for="start-date">Từ ngày</label>
+        <input type="date" id="start-date">
+    </div>
+    <div>
+        <label for="end-date">Đến ngày</label>
+        <input type="date" id="end-date">
+    </div>
+    <div>
+        <label>&nbsp;</label>
+        <button id="btn-filter">Lọc</button>
+    </div>
+</div>
+            <!-- Nút lọc tạm ẩn vì dữ liệu đang tải từ server -->
+            <!-- <div class="filter-group">
+                <label>&nbsp;</label>
+                <button id="btn-filter">Lọc</button>
+            </div> -->
+        </div>
+
+        <!-- Bảng dữ liệu -->
+        <table id="attendance-table">
+            <thead>
+                <tr>
+                    <th>Mã NV</th>
+                    <th>Họ tên</th>
+                    <th>Ngày</th>
+                    <th>Vào</th>
+                    <th>Ra</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records %}
+                    {% for r in records %}
+                    <tr>
+                        <td>{{ r.EmployeeID }}</td>
+                        <td>{{ r.EmployeeName or 'Chưa xác định' }}</td>
+                        <td>{{ r.CheckIn[:10] if r.CheckIn else '-' }}</td>
+                        <td>{{ r.CheckIn[11:16] if r.CheckIn else '-' }}</td>
+                        <td>{{ r.CheckOut[11:16] if r.CheckOut else 'Chưa ra' }}</td>
+                        <td>
+                            <span class="status {{ r.Status|lower|replace(' ', '-') }}">{{ r.Status or 'Chưa xác định' }}</span>
+                        </td>
+                        <td class="action-links">
+                            <a href="{{ url_for('attendance.attendance_detail_page', employee_id=r.EmployeeID, date=r.CheckIn[:10]) }}">Xem</a>
+                            <a href="{{ url_for('attendance.attendance_update_page', employee_id=r.EmployeeID, date=r.CheckIn[:10]) }}">Sửa</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="no-data">
+                            {% if error %}
+                                {{ error }}
+                            {% else %}
+                                Không có dữ liệu chấm công.
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

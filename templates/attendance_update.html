@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cập nhật chấm công</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #f4f4f4; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        form { max-width: 600px; }
+        label { display: block; margin: 12px 0 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .btn-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-save { background-color: #4400ff; color: white;}
+        .btn-save:hover { background-color: #0056b3; ;}
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            line-height: 26px;
+        }
+        .btn-back:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Cập nhật chấm công - <span id="employee-name"></span></h2>
+        <p><strong>Mã NV:</strong> <span id="employee-id"></span> | 
+           <strong>Ngày:</strong> <span id="date"></span></p>
+    </div>
+
+    <form id="attendance-form">
+        <label for="check_in">Thời gian vào:</label>
+        <input type="datetime-local" id="check_in" name="check_in">
+
+        <label for="check_out">Thời gian ra:</label>
+        <input type="datetime-local" id="check_out" name="check_out">
+
+        <label for="status">Trạng thái:</label>
+        <select id="status" name="status">
+            <option value="on_time">Đúng giờ</option>
+            <option value="late">Trễ giờ</option>
+            <option value="early_leave">Rời sớm</option>
+            <option value="absent">Vắng</option>
+            <option value="leave">Nghỉ phép</option>
+        </select>
+
+        <label for="note">Ghi chú:</label>
+        <input type="text" id="note" name="note" placeholder="Nhập ghi chú (nếu có)...">
+        <div class="btn-group">
+            <button type="submit" class="btn-save">Lưu cập nhật</button>
+            
+            <a href="{{ url_for('home') }}" class="back-btn">← Hủy</a>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+2025-12-07 03:23:38,843 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-12-07 03:23:38,844 - INFO - [33mPress CTRL+C to quit[0m
+2025-12-07 03:23:38,855 - INFO -  * Restarting with watchdog (windowsapi)
+2025-12-07 03:23:39,475 - WARNING -  * Debugger is active!
+2025-12-07 03:23:39,481 - INFO -  * Debugger PIN: 170-189-226
+2025-12-07 03:23:47,693 - INFO -  * Detected change in 'C:\\Users\\SQ\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\werkzeug\\routing\\map.py', reloading
+2025-12-07 03:23:47,700 - INFO - 127.0.0.1 - - [07/Dec/2025 03:23:47] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2025-12-07 03:23:47,880 - INFO - 127.0.0.1 - - [07/Dec/2025 03:23:47] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2025-12-07 03:23:47,913 - INFO - 127.0.0.1 - - [07/Dec/2025 03:23:47] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2025-12-07 03:23:47,985 - INFO - 127.0.0.1 - - [07/Dec/2025 03:23:47] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=yk7HCw3TGn4elLV8FZSi HTTP/1.1" 200 -
+2025-12-07 03:23:48,222 - INFO - 127.0.0.1 - - [07/Dec/2025 03:23:48] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2025-12-07 03:23:48,695 - INFO -  * Restarting with watchdog (windowsapi)
+2025-12-07 03:23:49,713 - WARNING -  * Debugger is active!
+2025-12-07 03:23:49,717 - INFO -  * Debugger PIN: 170-189-226
+2025-12-07 03:26:00,764 - INFO -  * Detected change in 'D:\\445\\TichHopHeThong_Nhom7\\app.py', reloading
+2025-12-07 03:26:00,765 - INFO -  * Detected change in 'D:\\445\\TichHopHeThong_Nhom7\\app.py', reloading
+2025-12-07 03:26:01,114 - INFO -  * Restarting with watchdog (windowsapi)

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết chấm công</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background-color: #f4f4f4; padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f9f9f9; }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .back-btn:hover { background-color: #5a6861; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Chi tiết chấm công - <span id="employee-name"></span></h2>
+        <p><strong>Mã NV:</strong> <span id="employee-id"></span> | 
+           <strong>Phòng ban:</strong> <span id="department"></span> | 
+           <strong>Ngày:</strong> <span id="date"></span></p>
+    </div>
+
+    <table id="attendance-records">
+        <thead>
+            <tr>
+                <th>Thời gian vào</th>
+                <th>Thời gian ra</th>
+                <th>Trạng thái</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dữ liệu sẽ được chèn động từ JS hoặc backend -->
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('attendance.attendance_summary_page') }}" class="back-btn">← Quay lại tổng hợp</a>
+</body>
+</html>
